@@ -12,7 +12,7 @@ public interface AlertBoxInterface {
      * @param header  The header text of the alert.
      * @param message The content message of the alert.
      */
-    void showAlert(String title, String header, String message);
+    void InformationAlert(String title, String header, String message);
 
     /**
      * Displays an error alert with the specified title, header, and message.
@@ -22,4 +22,5 @@ public interface AlertBoxInterface {
      * @param message The content message of the alert.
      */
     void errorAlert(String title, String header, String message);
+    boolean confirmationAlert(String title, String header, String message);
 }

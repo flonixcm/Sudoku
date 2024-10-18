@@ -1,5 +1,6 @@
 package org.example.sudoku.View.Alert;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 /**
  * AlertBox class provides methods to show alerts in the application.
@@ -15,7 +16,7 @@ public class AlertBox implements AlertBoxInterface {
      * @param message The content message of the alert.
      */
     @Override
-    public void showAlert(String title, String header, String message) {
+    public void InformationAlert(String title, String header, String message) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION); // Create an information alert
         alert.setTitle(title); // Set the title of the alert
         alert.setHeaderText(header); // Set the header of the alert
@@ -36,5 +37,13 @@ public class AlertBox implements AlertBoxInterface {
         alert.setHeaderText(header); // Set the header of the alert
         alert.setContentText(message); // Set the content of the alert
         alert.showAndWait(); // Show the alert and wait for the user to close it
+    }
+    public boolean confirmationAlert(String title, String header, String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION); // Create a confirmation alert
+        alert.setTitle(title); // Set the title of the alert
+        alert.setHeaderText(header); // Set the header of the alert
+        alert.setContentText(message); // Set the content of the alert
+        // Show the alert and wait for the user response
+        return alert.showAndWait().map(response -> response == ButtonType.OK).orElse(false);
     }
 }
