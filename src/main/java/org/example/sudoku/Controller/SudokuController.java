@@ -136,7 +136,7 @@ public class SudokuController {
                     // Add a ChangeListener to handle user input.
                     textField.textProperty().addListener((observable, oldValue, newValue) -> {
                         if (!newValue.isEmpty()) {
-                            // Limit the input to one character.
+                            // Limit the input to one character .
                             if (newValue.length() > 1) {
                                 new AlertBox().InformationAlert("Sudoku", "size error", "They can only be one-digit numbers.");
                                 return;
