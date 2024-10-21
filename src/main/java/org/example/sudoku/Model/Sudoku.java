@@ -173,4 +173,17 @@ public class Sudoku {
             grid[row][col] = value;  // Update the cell with the value.
         }
     }
+    public boolean isCompleted() {
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 6; col++) {
+                // Check if any cell is empty or the number doesn't match the solution
+                if (grid[row][col] == 0 || grid[row][col] != fullGrid[row][col]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
 }
+

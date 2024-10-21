@@ -2,8 +2,10 @@ package org.example.sudoku.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import org.example.sudoku.Model.Sudoku;
 import org.example.sudoku.View.Alert.AlertBox;
 
@@ -12,6 +14,11 @@ import java.util.List;
 import java.util.Random;
 
 public class SudokuController {
+
+    @FXML
+    private Label errorlabel;
+
+    int acum=0;
 
     @FXML
     private GridPane SudokuGridpane; // The GridPane that holds the Sudoku cells in the UI.
@@ -52,11 +59,13 @@ public class SudokuController {
             // Get the correct value for this cell from the completed grid.
             int value = sudoku.getFullGridValue(row, col);
 
+
             // Update the model with the revealed value.
             sudoku.setValue(row, col, value);
 
             // Refresh the view to reflect the updated model.
             updateGrid();
+
         } else {
             // If no empty cells remain, show an alert.
             new AlertBox().InformationAlert("Sudoku", "No empty cells", "There are no more empty cells to reveal.");
@@ -111,22 +120,27 @@ public class SudokuController {
      */
     private void updateGrid() {
         SudokuGridpane.getChildren().clear();  // Clear the previous grid.
-
         for (int row = 0; row < 6; row++) {
             for (int col = 0; col < 6; col++) {
                 // Create a TextField for each cell.
                 TextField textField = new TextField();
                 textField.setPrefWidth(50);  // Set cell width.
                 textField.setPrefHeight(100);  // Set cell height.
-                textField.setStyle("-fx-alignment: center; -fx-font-size: 24px;");  // Center text and set font size.
-
+                textField.setStyle(" -fx-alignment: center; -fx-font-size: 24px;");  // Center text and set font size.
                 int value = sudoku.getGrid()[row][col];  // Get the value for this cell from the Sudoku model.
+                BorderWidths borderWidths = new BorderWidths(
+                        (row % 2 == 0 && row != 0) ? 4 : 1,
+                        (col % 3 == 2) ? 4 : 1,
+                        (row == 5) ? 4 : 1,
+                        (col == 0) ? 4 : 1
+                );
 
+                textField.setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, borderWidths)));
                 if (value != 0) {
                     // If the cell has a value, display it and make the cell non-editable.
                     textField.setText(String.valueOf(value));
                     textField.setEditable(false);
-                    textField.setStyle(textField.getStyle() + "-fx-border-color: green; -fx-border-width: 2px;");  // Set green border for preset values.
+                    textField.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, null, null)));
                 } else {
                     // If the cell is empty, make it editable by the user.
                     textField.setEditable(true);
@@ -153,9 +167,13 @@ public class SudokuController {
                                         // Update the model if the number is valid.
                                         sudoku.setValue(finalRow, finalCol, newValueInt);
                                         textField.setStyle(textField.getStyle() + "-fx-border-color: green; -fx-border-width: 2px;");  // Green border for valid inputs.
+
                                     } else {
+                                        acum+=1;
                                         textField.setStyle(textField.getStyle() + "-fx-border-color: red; -fx-border-width: 2px;");  // Red border for invalid inputs.
                                         new AlertBox().InformationAlert("Sudoku", "Invalid number", "The number you entered is not valid for this cell.");
+                                        this.errorlabel.setText("Numero de errores: "+acum);
+
                                     }
                                 } else {
                                     // If the number is out of range (not between 1 and 6), clear it.
@@ -173,7 +191,11 @@ public class SudokuController {
                 }
                 // Add the TextField to the GridPane at the corresponding row and column.
                 SudokuGridpane.add(textField, col, row);
+
             }
+        }
+        if (sudoku.isCompleted()) {
+            new AlertBox().InformationAlert("Sudoku", "Congratulations!", "You have successfully completed the Sudoku!");
         }
     }
 }
